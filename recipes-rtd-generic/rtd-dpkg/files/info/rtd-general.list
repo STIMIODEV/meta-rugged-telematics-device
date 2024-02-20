@@ -1,0 +1,10 @@
+/.
+/etc
+/etc/bluetooth
+/etc/ppp
+/etc/ppp/chat
+/etc/ppp/chat/gprs
+/etc/ppp/options-mobile
+/etc/ppp/peers
+/etc/ppp/peers/gprs_4g
+/etc/udhcpd.conf

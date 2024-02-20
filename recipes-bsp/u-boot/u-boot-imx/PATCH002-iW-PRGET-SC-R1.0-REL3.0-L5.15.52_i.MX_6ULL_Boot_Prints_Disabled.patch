@@ -1,0 +1,12 @@
+diff -Naur A/include/configs/mx6ull-iwg26i.h B/include/configs/mx6ull-iwg26i.h
+--- A/include/configs/mx6ull-iwg26i.h	2023-03-27 09:47:54.152891160 +0530
++++ B/include/configs/mx6ull-iwg26i.h	2023-03-27 09:49:48.916893883 +0530
+@@ -57,6 +57,8 @@
+ #define CONFIG_POWER_PFUZE3000_I2C_ADDR	0x08
+ #endif
+ 
++#define CONFIG_SYS_MMC_IMG_LOAD_PART   1
++
+ #ifdef CONFIG_NAND_BOOT
+ #define MFG_NAND_PARTITION "mtdparts=gpmi-nand:10m(boot),16m(kernel),16m(dtb),-(rootfs) "
+ #else

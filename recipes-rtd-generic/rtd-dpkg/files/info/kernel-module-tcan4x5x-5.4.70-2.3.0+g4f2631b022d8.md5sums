@@ -1,0 +1,2 @@
+7295ae8c8f48a77e3aab2f07c7c96dcd  etc/modprobe.d/tcan4x5x.conf
+17315f0fdae19a85610bf803c71b4363  lib/modules/5.4.70-2.3.0+g4f2631b022d8/kernel/drivers/net/can/m_can/tcan4x5x.ko

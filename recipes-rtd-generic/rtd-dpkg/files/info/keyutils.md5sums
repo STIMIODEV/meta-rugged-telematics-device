@@ -1,0 +1,6 @@
+af3f9c7ca630453987379b2f0276ef4e  bin/keyctl
+8ad8d7d3deb6e3fbaaf483ed94fb6284  etc/request-key.conf
+f3c75626bf42f67d19cb1e2e5b9a9019  sbin/key.dns_resolver
+2a569b89dfaea196634ee1ee1ab488a4  sbin/request-key
+a9bb2865e68094a92b087fc97ee85f34  usr/lib/libkeyutils.so.1.8
+738c1d4c2c763040c6e47e5b19861292  usr/share/keyutils/request-key-debug.sh

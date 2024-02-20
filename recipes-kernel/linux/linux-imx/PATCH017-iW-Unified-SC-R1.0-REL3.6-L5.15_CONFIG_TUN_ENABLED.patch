@@ -1,0 +1,24 @@
+diff -Naur A/arch/arm/configs/imx6ull_iwg26i_defconfig B/arch/arm/configs/imx6ull_iwg26i_defconfig
+--- A/arch/arm/configs/imx6ull_iwg26i_defconfig	2023-09-13 17:52:07.491585444 +0530
++++ B/arch/arm/configs/imx6ull_iwg26i_defconfig	2023-09-13 17:55:54.323582945 +0530
+@@ -1633,7 +1633,7 @@
+ # CONFIG_GTP is not set
+ # CONFIG_MACSEC is not set
+ # CONFIG_NETCONSOLE is not set
+-# CONFIG_TUN is not set
++CONFIG_TUN=y
+ # CONFIG_TUN_VNET_CROSS_LE is not set
+ # CONFIG_VETH is not set
+ # CONFIG_VIRTIO_NET is not set
+diff -Naur A/arch/arm/mach-imx/mach-iwg26i.c B/arch/arm/mach-imx/mach-iwg26i.c
+--- A/arch/arm/mach-imx/mach-iwg26i.c	2023-09-13 17:52:07.523585443 +0530
++++ B/arch/arm/mach-imx/mach-iwg26i.c	2023-09-13 17:56:18.115582683 +0530
+@@ -213,7 +213,7 @@
+ 	printk ("\n");
+ 	printk ("Board Info :\n");
+ 	printk ("\tBSP Version : %s\n", BSP_VERSION);
+-	printk ("\tDevice Name and Release : iW-Unified-SC-01-R3.0-REL3.5-Linux5.15\n");
++	printk ("\tDevice Name and Release : iW-Unified-SC-01-R3.0-REL3.6-Linux5.15\n");
+ 	printk ("\tCPU Unique ID\t: 0x%08x%08x \n", unique_id2, unique_id1);
+ 	printk ("\n");
+ 

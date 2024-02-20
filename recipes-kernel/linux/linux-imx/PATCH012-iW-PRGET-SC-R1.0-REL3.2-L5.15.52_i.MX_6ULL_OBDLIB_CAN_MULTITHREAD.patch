@@ -1,0 +1,160 @@
+diff -Naur A/drivers/net/can/m_can/m_can.c B/drivers/net/can/m_can/m_can.c
+--- A/drivers/net/can/m_can/m_can.c	2023-04-26 09:55:03.491755279 +0530
++++ B/drivers/net/can/m_can/m_can.c	2023-04-26 10:23:46.403754304 +0530
+@@ -833,6 +833,8 @@
+ {
+ 	if (irqstatus & IR_WDI)
+ 		netdev_err(dev, "Message RAM Watchdog event due to missing READY\n");
++	if (irqstatus & IR_ELO)
++		netdev_err(dev, "Error Logging Overflow\n");
+ 	if (irqstatus & IR_BEU)
+ 		netdev_err(dev, "Bit Error Uncorrected\n");
+ 	if (irqstatus & IR_BEC)
+@@ -917,6 +919,14 @@
+ 	return work_done;
+ }
+ 
++static int m_can_rx_handler_rx(struct net_device *dev, int quota)
++{
++	int work_done = 0;
++	work_done += m_can_do_rx_poll(dev, (quota - work_done));
++	return work_done;
++		
++}
++
+ static int m_can_rx_handler(struct net_device *dev, int quota)
+ {
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+@@ -959,37 +969,30 @@
+ 		if (irqstatus & IR_ERR_BUS_31X)
+ 			work_done += m_can_handle_bus_errors(dev, irqstatus, psr);
+ 
+-		if (irqstatus & IR_RF0W) {
+-			rx_work_or_err = m_can_do_rx_poll(dev, (quota - work_done));
+-			if (rx_work_or_err < 0)
+-				return rx_work_or_err;
+-
+-			work_done += rx_work_or_err;
+-		}
++		if (irqstatus & IR_RF0N) /* 1804 */
++			work_done += m_can_do_rx_poll(dev, (quota - work_done));
+ 	}
+ 	else /* iw_mcan_prop */
+ 	{
+ 		if (irqstatus & IR_ERR_BUS_30X)
+ 			work_done += m_can_handle_bus_errors(dev, irqstatus, psr);
+ 
+-		if (irqstatus & IR_RF0N) {
+-			rx_work_or_err = m_can_do_rx_poll(dev, (quota - work_done));
+-			if (rx_work_or_err < 0)
+-				return rx_work_or_err;
+-
+-			work_done += rx_work_or_err;
+-		}
++		if (irqstatus & IR_RF0N)
++			work_done += m_can_do_rx_poll(dev, (quota - work_done));
+ 	} /* iw_mcan_prop */
+ end:
+ 	return work_done;
+ }
+ 
+-static int m_can_rx_handler_rx(struct net_device *dev, int quota)
++static int m_can_rx_peripheral_rx(struct net_device *dev)
+ {
+-	int work_done = 0;
+-	work_done += m_can_do_rx_poll(dev, (quota - work_done));
++	struct m_can_classdev *cdev = netdev_priv(dev);
+ 
+-	return work_done;
++	m_can_rx_handler_rx(dev, 1); //1804
++//	m_can_rx_handler_rx(dev, M_CAN_NAPI_WEIGHT);	
++
++	m_can_enable_all_interrupts(cdev);
++	return 0;
+ }
+ 
+ static int m_can_rx_peripheral(struct net_device *dev)
+@@ -997,7 +1000,8 @@
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+ 	int work_done;
+ 
+-	work_done = m_can_rx_handler(dev, M_CAN_NAPI_WEIGHT);
++	m_can_rx_handler(dev, 1); // 1804
++//	m_can_rx_handler(dev, M_CAN_NAPI_WEIGHT);	
+ 
+ 	/* Don't re-enable interrupts if the driver had a fatal error
+ 	 * (e.g., FIFO read failure).
+@@ -1008,16 +1012,6 @@
+ 	return work_done;
+ }
+ 
+-static int m_can_rx_peripheral_rx(struct net_device *dev)
+-{
+-	struct m_can_classdev *cdev = netdev_priv(dev);
+-
+-	m_can_rx_handler_rx(dev, 1);
+-	m_can_enable_all_interrupts(cdev);
+-
+-	return 0;
+-}
+-
+ int m_can_rx_clear(struct net_device *dev)
+ {
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+@@ -1892,6 +1886,7 @@
+ 			cdev->tx_skb = skb;
+ 			netif_stop_queue(cdev->net);
+ 			queue_work(cdev->tx_wq, &cdev->tx_work);
++			netif_start_queue(cdev->net);  /* 1904 normal */
+ 		}
+ 	} else {
+ 		cdev->tx_skb = skb;
+diff -Naur A/drivers/net/can/m_can/tcan4x5x-core.c B/drivers/net/can/m_can/tcan4x5x-core.c
+--- A/drivers/net/can/m_can/tcan4x5x-core.c	2023-04-26 09:55:03.491755279 +0530
++++ B/drivers/net/can/m_can/tcan4x5x-core.c	2023-04-26 10:28:10.871754154 +0530
+@@ -258,12 +258,11 @@
+ 
+ 	tcan4x5x_check_wake(tcan4x5x);
+ 
+-	if (!iw_tcan_prop)
+-	{
+-		ret = tcan4x5x_clear_interrupts(cdev);
+-		if (ret)
+-			return ret;
+-	}
++	/* 2404 */
++	ret = tcan4x5x_clear_interrupts(cdev);
++        if (ret)
++                return ret;
++	/* */
+ 
+ 	ret = tcan4x5x_write_tcan_reg(cdev, TCAN4X5X_INT_EN,
+ 				      TCAN4X5X_ENABLE_TCAN_INT);
+@@ -271,9 +270,9 @@
+ 		return ret;
+ 
+ 	/* Zero out the MCAN buffers */
+-	ret = m_can_init_ram(cdev);
+-	if (ret)
+-		return ret;
++	//ret = m_can_init_ram(cdev);
++	//if (ret)
++	//	return ret;
+ 
+ 	if (iw_tcan_prop)
+ 	{
+@@ -287,11 +286,12 @@
+ 		if (ret)
+ 			return ret;
+ 	
+-		ret = tcan4x5x_clear_interrupts(cdev);
++	/*	ret = tcan4x5x_clear_interrupts(cdev);
+ 		if (ret)
+-			return ret;
++			return ret;*/
+ 	}
+ 
++	m_can_init_ram(cdev);
+ 	ret = regmap_update_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
+ 				 TCAN4X5X_MODE_SEL_MASK, TCAN4X5X_MODE_NORMAL);
+ 	if (ret)

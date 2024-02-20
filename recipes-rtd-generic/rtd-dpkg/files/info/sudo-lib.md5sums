@@ -1,0 +1,12 @@
+0c39959d447b7d5f98cce1948e591a3a  etc/sudo.conf
+8f2d34058527c9b8155de178aacff2cd  etc/sudo_logsrvd.conf
+bd52610551ca3568f4a0cbc597a9113e  etc/sudoers
+bd52610551ca3568f4a0cbc597a9113e  etc/sudoers.dist
+a30a021aae178b05bbc2c2a35ef7b9ce  usr/lib/sudo/audit_json.so
+86ea0663a7918bfa3f85ca8e8db560e7  usr/lib/sudo/group_file.so
+7c05dee765763aaf599ca8738bc666c3  usr/lib/sudo/libsudo_util.so.0.0.0
+24107c81c5ee11ab0efc07e198be97fb  usr/lib/sudo/sample_approval.so
+e1687e044684d406b992021f83748fff  usr/lib/sudo/sudo_noexec.so
+ab4e9bb0d6548bb9d381690d75f45624  usr/lib/sudo/sudoers.so
+1441d602e3d8d972877fbee9bae4106c  usr/lib/sudo/system_group.so
+ee8d33d217810b046dd36a357839ee9e  usr/lib/tmpfiles.d/sudo.conf

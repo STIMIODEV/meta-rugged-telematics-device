@@ -1,0 +1,5 @@
+5fa95911337e248f550e45bc334da9d4  usr/bin/obexftp
+5ea7c83435ca2de903318a07b7b803b7  usr/bin/obexftpd
+e13fcea5566d2b7d1fbc4af176e21d77  usr/lib/libbfb.so.0.0.6
+dfc8de9819c52c3c8dec1ee60fa869c4  usr/lib/libmulticobex.so.1.0.2
+9b24bbe3fba89613ff51c09809cae4a7  usr/lib/libobexftp.so.0.3.0

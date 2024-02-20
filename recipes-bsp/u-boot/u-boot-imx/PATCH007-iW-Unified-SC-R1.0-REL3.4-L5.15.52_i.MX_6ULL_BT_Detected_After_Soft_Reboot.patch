@@ -1,0 +1,61 @@
+diff -Naur A/arch/arm/mach-imx/cpu.c B/arch/arm/mach-imx/cpu.c
+--- A/arch/arm/mach-imx/cpu.c	2023-09-13 17:31:46.535598894 +0530
++++ B/arch/arm/mach-imx/cpu.c	2023-09-13 17:32:57.587598111 +0530
+@@ -203,6 +203,8 @@
+ {
+ 	u32 cpurev;
+ 	__maybe_unused u32 max_freq;
++	char *reset_cause = NULL;
++        u32 time, msb, lsb;
+ #if defined(CONFIG_DBG_MONITOR)
+ 	struct dbg_monitor_regs *dbg =
+ 		(struct dbg_monitor_regs *)DEBUG_MONITOR_BASE_ADDR;
+@@ -272,7 +274,29 @@
+ 		       readl(&dbg->snvs_info));
+ #endif
+ 
++	reset_cause = get_reset_cause();
+ 	printf("Reset cause: %s\n", get_reset_cause());
++	 if (strcmp(reset_cause , "WDOG") == 0)
++        {
++                printf("WDOG reset detected..! Resetting PMIC.\n");
++                /* Disable LPTA_EN regiter to alter SNVS_LPTAR register */
++                writel(0x21, (SNVS_BASE_ADDR + SNVS_LPCR));
++                udelay(10000);
++                /* Read SNVS_LP Secure Real Time Counter MSB */
++                msb = readl(SNVS_BASE_ADDR + SNVS_LPSRTCMR);
++                /* Read SNVS_LP Secure Real Time Counter LSB */
++                lsb = readl(SNVS_BASE_ADDR + SNVS_LPSRTCLR);
++                udelay(10000);
++                time = ((u64)msb << 32 | lsb) >> 15;
++                time++;
++                /* Set SNVS_LP Time Alarm 1 sec in the future */
++                writel(time, (SNVS_BASE_ADDR + SNVS_LPTAR));
++                udelay(10000);
++                /*Enabled TOP(Turn Off System Power) to signal PMIC to turn off system power */
++                writel(0x6b, (SNVS_BASE_ADDR + SNVS_LPCR));
++                udelay(10000);
++        }
++
+ 	return 0;
+ }
+ #endif
+diff -Naur A/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c B/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c
+--- A/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c	2023-09-13 17:31:46.647598893 +0530
++++ B/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c	2023-09-13 17:48:26.003587884 +0530
+@@ -619,13 +619,13 @@
+ 	else if (is_cpu_type(MXC_CPU_MX6ULZ))
+ 	{
+ 		puts("Board: Telematics-Device\n");
+-		puts("Release: iW-Unified-SC-01-R3.0-REL3.3-Linux5.15\n");
++		puts("Release: iW-Unified-SC-01-R3.0-REL3.4-Linux5.15\n");
+ 		puts("BSP_VERSION: L5.15.52\n");
+ 	}
+ 	else
+ 	{
+ 		puts("Board: Telematics-Device\n");
+-		puts("Release: iW-Unified-SC-01-R3.0-REL3.3-Linux5.15\n");
++		puts("Release: iW-Unified-SC-01-R3.0-REL3.4-Linux5.15\n");
+ 		puts("BSP_VERSION: L5.15.52\n");
+ 	}
+ 	return 0;

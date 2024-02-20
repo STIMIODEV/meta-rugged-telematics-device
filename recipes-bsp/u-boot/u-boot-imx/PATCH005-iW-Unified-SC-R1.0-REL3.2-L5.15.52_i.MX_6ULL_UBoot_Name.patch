@@ -1,0 +1,19 @@
+diff -Naur A/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c B/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c
+--- A/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c	2023-04-28 11:27:09.070999322 +0530
++++ B/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c	2023-04-28 11:32:00.699006242 +0530
+@@ -619,13 +619,13 @@
+ 	else if (is_cpu_type(MXC_CPU_MX6ULZ))
+ 	{
+ 		puts("Board: Telematics-Device\n");
+-		puts("Release: iW-PRGET-SC-01-R3.0-REL3.1-Linux5.15\n");
++		puts("Release: iW-Unified-SC-01-R3.0-REL3.2-Linux5.15\n");
+ 		puts("BSP_VERSION: L5.15.52\n");
+ 	}
+ 	else
+ 	{
+ 		puts("Board: Telematics-Device\n");
+-		puts("Release: iW-PRGET-SC-01-R3.0-REL3.1-Linux5.15\n");
++		puts("Release: iW-Unified-SC-01-R3.0-REL3.2-Linux5.15\n");
+ 		puts("BSP_VERSION: L5.15.52\n");
+ 	}
+ 	return 0;

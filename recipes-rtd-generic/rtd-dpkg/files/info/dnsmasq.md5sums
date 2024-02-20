@@ -1,0 +1,6 @@
+092ea1ea29b3bfc1452f8b431617de12  etc/dnsmasq.conf
+cc7d75106a4649d0a68304cbc60e5803  etc/systemd/resolved.conf.d/dnsmasq-resolved.conf
+05f051991e182cb53e3952b851037cae  lib/systemd/system/dnsmasq.service
+78c312206d0416d128e0dfe9527b9222  lib/systemd/system-preset/98-dnsmasq.preset
+05f846ae74b9433fbcd03f76618420ff  usr/bin/dhcp_release
+4c2a609ed85749cfbeda9ea45a83d033  usr/bin/dnsmasq

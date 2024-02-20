@@ -1,0 +1,6 @@
+f291f643aa5117d5e46f1e364974877f  lib/systemd/system/gpsd.service
+87adcc18fbcd97c5a714a5592b9d3c41  lib/systemd/system/gpsd.socket
+5d1ea2ca9eabf9a39083f16bf9824876  lib/systemd/system/gpsdctl@.service
+b81a5f1378174b699c6fe64c554e7169  lib/systemd/system-preset/98-gpsd.preset
+d7799fda83b4dda3b67c0ae710fb9cc5  usr/sbin/gpsd
+7874d2185c22e0122097e723f36d97f1  usr/sbin/gpsdctl

@@ -1,0 +1,11 @@
+/.
+/lib
+/lib/udev
+/lib/udev/rules.d
+/lib/udev/rules.d/60-openobex.rules
+/usr
+/usr/lib
+/usr/lib/libopenobex.so.1.7.2
+/usr/sbin
+/usr/sbin/obex-check-device
+/usr/lib/libopenobex.so.2

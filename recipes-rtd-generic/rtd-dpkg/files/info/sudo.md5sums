@@ -1,0 +1,5 @@
+92d11dddf63cece20823cbce7dcd3168  usr/bin/cvtsudoers
+b5f4d491751471d00ff3ca5f33ff4217  usr/bin/sudoreplay
+dab56b2a61b4ac8a137dc806e1490c8e  usr/sbin/sudo_logsrvd
+e3a442a5d6c624674cfef6f15cc29d73  usr/sbin/sudo_sendlog
+4153b94952e7fd71739033fd394a41f6  usr/sbin/visudo

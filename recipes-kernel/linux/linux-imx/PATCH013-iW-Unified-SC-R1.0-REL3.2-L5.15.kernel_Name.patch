@@ -1,0 +1,12 @@
+diff -Naur A/arch/arm/mach-imx/mach-iwg26i.c B/arch/arm/mach-imx/mach-iwg26i.c
+--- A/arch/arm/mach-imx/mach-iwg26i.c	2023-04-28 11:04:20.362966844 +0530
++++ B/arch/arm/mach-imx/mach-iwg26i.c	2023-04-28 11:06:56.526970550 +0530
+@@ -213,7 +213,7 @@
+ 	printk ("\n");
+ 	printk ("Board Info :\n");
+ 	printk ("\tBSP Version : %s\n", BSP_VERSION);
+-	printk ("\tDevice Name and Release : iW-PRGET-SC-01-R3.0-REL3.1-Linux5.15\n");
++	printk ("\tDevice Name and Release : iW-Unified-SC-01-R3.0-REL3.2-Linux5.15\n");
+ 	printk ("\tCPU Unique ID\t: 0x%08x%08x \n", unique_id2, unique_id1);
+ 	printk ("\n");
+ 

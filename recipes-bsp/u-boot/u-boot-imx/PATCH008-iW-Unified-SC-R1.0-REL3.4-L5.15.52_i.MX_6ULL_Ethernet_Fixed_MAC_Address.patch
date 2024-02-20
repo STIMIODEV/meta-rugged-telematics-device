@@ -1,0 +1,26 @@
+diff -Naur A/net/eth_legacy.c B/net/eth_legacy.c
+--- A/net/eth_legacy.c	2023-09-20 13:38:34.011033913 +0530
++++ B/net/eth_legacy.c	2023-09-21 10:47:54.309590551 +0530
+@@ -245,7 +245,7 @@
+ int eth_initialize(void)
+ {
+ 	int num_devices = 0;
+-
++    struct eth_device *dev = NULL;
+ 	eth_devices = NULL;
+ 	eth_current = NULL;
+ 	eth_common_init();
+@@ -267,9 +267,12 @@
+ 		log_err("No ethernet found.\n");
+ 		bootstage_error(BOOTSTAGE_ID_NET_ETH_START);
+ 	} else {
+-		struct eth_device *dev = eth_devices;
++//		struct eth_device *dev = eth_devices;
++		dev = eth_devices;
+ 		char *ethprime = env_get("ethprime");
+ 
++        dev->index = 0;
++
+ 		bootstage_mark(BOOTSTAGE_ID_NET_ETH_INIT);
+ 		do {
+ 			if (dev->index)

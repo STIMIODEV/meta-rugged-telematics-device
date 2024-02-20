@@ -1,0 +1,11 @@
+[Unit]
+Description=LTE Service
+Before=network.target
+[Service]
+
+#ExecStartPre=/bin/sleep 60
+ExecStart=/usr/bin/python3 /usr/bin/network_management.py
+StandardOutput=tty
+
+[Install]
+WantedBy=multi-user.target

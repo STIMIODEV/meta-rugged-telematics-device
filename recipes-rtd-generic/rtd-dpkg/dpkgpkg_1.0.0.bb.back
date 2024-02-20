@@ -1,0 +1,37 @@
+SUMMARY = "DPKG package installed in Telematics Device"
+DESCRIPTION = "Recipe to install packages through apt-get in Telematics Device"
+LICENSE = "CLOSED"
+
+SRC_URI ="file://status \
+	  file://status-old \
+	  file://available \
+	  file://lock \
+	  file://lock-frontend \
+	  file://alternatives \
+	  file://updates \
+	  file://parts \
+	  file://info \
+	  file://triggers \
+"
+export prefix = "/var"
+export libdir = "${prefix}/lib"
+FILES:${PN} = "${libdir}"
+
+S = "${WORKDIR}"
+
+do_install() {
+        install -d ${D}${libdir}
+	install -d ${D}${libdir}/dpkg
+	install -d ${D}${libdir}/dpkg/alternatives
+	install -d ${D}${libdir}/dpkg/updates
+	install -d ${D}${libdir}/dpkg/parts
+	install -d ${D}${libdir}/dpkg/info
+	install -d ${D}${libdir}/dpkg/triggers
+	install -m 755 ${WORKDIR}/status ${D}${libdir}/dpkg
+	install -m 755 ${WORKDIR}/status-old ${D}${libdir}/dpkg
+	install -m 755 ${WORKDIR}/available ${D}${libdir}/dpkg
+	install -m 755 ${WORKDIR}/lock ${D}${libdir}/dpkg
+	install -m 755 ${WORKDIR}/lock-frontend ${D}${libdir}/dpkg
+	cp -R ${WORKDIR}/info/* ${D}${libdir}/dpkg/info
+	cp -R ${WORKDIR}/triggers/* ${D}${libdir}/dpkg/triggers
+}

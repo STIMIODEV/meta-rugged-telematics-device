@@ -1,0 +1,5 @@
+4685d0b6a634432e4affcd6f0092cf3e  bin/login.shadow
+4ece5efbfa52b7ac0fe920b1188414a5  bin/su.shadow
+7c6dac8ef55c24925273bad1b71bfbb7  etc/login.defs
+0cdca5506ce6d6a6d7115dc7ca8dd36a  usr/bin/groups.shadow
+4d28bf286657c9f0d5bf8593273c4274  usr/bin/newgrp.shadow

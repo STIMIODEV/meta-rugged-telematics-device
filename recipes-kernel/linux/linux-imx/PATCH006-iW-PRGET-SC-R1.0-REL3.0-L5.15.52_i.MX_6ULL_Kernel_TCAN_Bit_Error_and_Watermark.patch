@@ -1,0 +1,26 @@
+diff -Naur A/drivers/net/can/m_can/m_can.c B/drivers/net/can/m_can/m_can.c
+--- A/drivers/net/can/m_can/m_can.c	2023-03-26 15:46:48.751351989 +0530
++++ B/drivers/net/can/m_can/m_can.c	2023-03-26 16:14:25.583391303 +0530
+@@ -235,6 +235,7 @@
+ /* Rx FIFO 0/1 Configuration (RXF0C/RXF1C) */
+ #define RXFC_FWM_MASK	GENMASK(30, 24)
+ #define RXFC_FS_MASK	GENMASK(22, 16)
++#define RXFC_FS_SHIFT   16
+ 
+ /* Rx FIFO 0/1 Status (RXF0S/RXF1S) */
+ #define RXFS_RFL	BIT(25)
+@@ -1391,11 +1392,12 @@
+ 	if (iw_mcan_prop)
+ 	{
+ 		m_can_write(cdev, M_CAN_RXF0C,
+-				FIELD_PREP(RXFC_FS_MASK, cdev->mcfg[MRAM_RXF0].num) |
++				(cdev->mcfg[MRAM_RXF0].num << RXFC_FS_SHIFT) |
+ 				cdev->mcfg[MRAM_RXF0].off | 0x99000000);
+ 
++		cdev->mcfg[MRAM_RXF0].num << RXFC_FS_SHIFT | cdev->mcfg[MRAM_RXF0].off;
+ 		m_can_write(cdev, M_CAN_RXF1C,
+-				FIELD_PREP(RXFC_FS_MASK, cdev->mcfg[MRAM_RXF1].num) |
++				(cdev->mcfg[MRAM_RXF1].num << RXFC_FS_SHIFT) |
+ 				cdev->mcfg[MRAM_RXF1].off | 0x99000000);
+ 	}
+ 	else /* iw_mcan_prop */

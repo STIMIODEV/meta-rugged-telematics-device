@@ -1,0 +1,16 @@
+/.
+/home
+/home/root
+/home/root/File_config.json
+/home/root/ISP_MODE_FW
+/home/root/lpcxpresso804_.bin
+/home/root/mcu_fw_updater
+/lib
+/lib/systemd
+/lib/systemd/system
+/lib/systemd/system/mcu_sbl_mode.service
+/lib/systemd/system-preset
+/lib/systemd/system-preset/98-rtd-mcu-bin.preset
+/usr
+/usr/bin
+/usr/bin/mcu_reset.sh

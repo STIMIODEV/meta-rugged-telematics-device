@@ -1,0 +1,15 @@
+65e1927096e0814042bc9d17de22f569  usr/lib/python2.7/bsddb/__init__.py
+c079109b653539ce25fe9dbeb12b30f1  usr/lib/python2.7/bsddb/__init__.pyc
+6e5ce227e9cf01587c3c392e2fdca4cc  usr/lib/python2.7/bsddb/db.py
+6ac504ecc2db7abe1aa3578ae73b4531  usr/lib/python2.7/bsddb/db.pyc
+4970186dfc0bf544dc46d2cbad23a18b  usr/lib/python2.7/bsddb/dbobj.py
+46488371089ba2ef7cb03e0cf4b264b3  usr/lib/python2.7/bsddb/dbobj.pyc
+72bbb3286311ff35b619f6646267c3b5  usr/lib/python2.7/bsddb/dbrecio.py
+a0ea3478c7e3f6ccb0f402aef32295b4  usr/lib/python2.7/bsddb/dbrecio.pyc
+3064dfe91420aa8d3ca2089d394c6bd3  usr/lib/python2.7/bsddb/dbshelve.py
+0dbb7737d058b100222463401b97ce26  usr/lib/python2.7/bsddb/dbshelve.pyc
+cc141146fe2257886e543d493ed6e1a1  usr/lib/python2.7/bsddb/dbtables.py
+794567419fce9e09ceafbf5384407ad8  usr/lib/python2.7/bsddb/dbtables.pyc
+aba9f241cd466f2693045435297dd811  usr/lib/python2.7/bsddb/dbutils.py
+eb02112c4d201a82573737d13c71f6f5  usr/lib/python2.7/bsddb/dbutils.pyc
+b7256bd542912c653d98d1d5cb508506  usr/lib/python2.7/lib-dynload/_bsddb.so

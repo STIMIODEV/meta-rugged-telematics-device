@@ -1,0 +1,15 @@
+6bb6c404c74d599abe20f112d2ff49e1  etc/firmware/BCM4345C0.1MW.hcd
+3160c14df7228891b868060e1951dfbc  lib/firmware/LICENCE.broadcom_bcm43xx
+2cb4b58cddaf9b4c2a0ac4ad79b4d252  lib/firmware/brcm/brcmfmac43455-sdio.bin
+d66abc1f26d8073150237ef4f6967bd1  lib/firmware/brcm/brcmfmac43455-sdio.clm_blob
+62d3e3bad57b074d6853f02270a8610e  lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,3-model-b-plus.txt
+40faedd5ca81729a62fe997127af7a2c  lib/firmware/brcm/brcmfmac43455-sdio.txt
+5960edc3bd49ffe4edc9680526d83ec6  lib/firmware/imx/epdc/epdc_E060SCM.fw
+773251db813655f4a2e7b51644b704af  lib/firmware/imx/epdc/epdc_E60_V110.fw
+119dd58bee8b534ba23bc49c7e7f52b9  lib/firmware/imx/epdc/epdc_E60_V220.fw
+1f13b49525284c6100bcfd8ad9515a1b  lib/firmware/imx/epdc/epdc_E97_V110.fw
+2ffb44908280331ffcf1e0f919a5530f  lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
+03405e6d82f1fe8ae1517d0a294027dd  lib/firmware/imx/sdma/sdma-imx6q.bin
+361734b0f2d712b1f877500a2b19325b  lib/firmware/imx/sdma/sdma-imx7d.bin
+713de5166b9ca8a20ad2c8b061bc2c79  lib/firmware/regulatory.db
+dfbe88bcf9a9ec16c8b8a7ffb48aef8e  lib/firmware/regulatory.db.p7s

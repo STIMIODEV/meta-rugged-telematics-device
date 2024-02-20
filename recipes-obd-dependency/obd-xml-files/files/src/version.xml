@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTWARE>
+	<LIBRARY>
+		<library_version>RELEASE_3.2</library_version>
+	</LIBRARY>
+	<SOFTWARE_DF>
+		<software_df>RELEASE_3.6</software_df>
+	</SOFTWARE_DF>
+	<BSP>
+		<kernel_version>5.15.52</kernel_version>
+	</BSP>
+</SOFTWARE>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NETWORK>
+	<BG_BAND>
+		<bg_band_supported>NULL</bg_band_supported>
+	</BG_BAND>
+	<EG_BAND>
+		<eg_band_supported>NULL</eg_band_supported>
+	</EG_BAND>
+	<APN>
+		<apn_name>airtelgprs.com</apn_name>
+	</APN>
+	<CPIN>
+		<cpin_value>0000</cpin_value>
+	</CPIN>
+	<ATD>
+		<atd_number>ATD*99#</atd_number>
+	</ATD>
+	<USERNAME>
+		<user_name>NULL</user_name>
+	</USERNAME>
+	<PASSWORD>
+		<password>NULL</password>
+	</PASSWORD>
+	<MODE>
+		<scan_mode>3</scan_mode>
+	</MODE>
+	<IOTOPMODE>
+		<iotopmode>0</iotopmode>
+	</IOTOPMODE>
+</NETWORK>

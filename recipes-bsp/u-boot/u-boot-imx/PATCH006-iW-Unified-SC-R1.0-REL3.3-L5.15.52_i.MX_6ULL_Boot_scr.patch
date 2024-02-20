@@ -1,0 +1,34 @@
+diff -Naur A/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c B/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c
+--- A/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c	2023-07-14 10:30:26.560986663 +0530
++++ B/board/freescale/mx6ull-iwg26i/mx6ull-iwg26i.c	2023-07-14 10:33:54.308986545 +0530
+@@ -619,13 +619,13 @@
+ 	else if (is_cpu_type(MXC_CPU_MX6ULZ))
+ 	{
+ 		puts("Board: Telematics-Device\n");
+-		puts("Release: iW-Unified-SC-01-R3.0-REL3.2-Linux5.15\n");
++		puts("Release: iW-Unified-SC-01-R3.0-REL3.3-Linux5.15\n");
+ 		puts("BSP_VERSION: L5.15.52\n");
+ 	}
+ 	else
+ 	{
+ 		puts("Board: Telematics-Device\n");
+-		puts("Release: iW-Unified-SC-01-R3.0-REL3.2-Linux5.15\n");
++		puts("Release: iW-Unified-SC-01-R3.0-REL3.3-Linux5.15\n");
+ 		puts("BSP_VERSION: L5.15.52\n");
+ 	}
+ 	return 0;
+diff -Naur A/fs/fs.c B/fs/fs.c
+--- A/fs/fs.c	2023-07-14 10:30:26.760986663 +0530
++++ B/fs/fs.c	2023-07-14 10:32:01.280986609 +0530
+@@ -748,10 +748,8 @@
+ 	time = get_timer(0);
+ 	ret = _fs_read(filename, addr, pos, bytes, 1, &len_read);
+ 	time = get_timer(time);
+-	if (ret < 0) {
+-		log_err("Failed to load '%s'\n", filename);
++	if (ret < 0)
+ 		return 1;
+-	}
+ 
+ 	if (IS_ENABLED(CONFIG_CMD_BOOTEFI))
+ 		efi_set_bootdev(argv[1], (argc > 2) ? argv[2] : "",

@@ -1,0 +1,7 @@
+0f770d9a725a9540e0e7190e1a7dc094  home/root/File_config.json
+cdfdb445e4235839dcc315769289c6bb  home/root/ISP_MODE_FW
+a77241328fe3802cd916b0152cbfdfb1  home/root/lpcxpresso804_.bin
+949e47353b8afefdda6e93538674e944  home/root/mcu_fw_updater
+964b36944cb7984a3ced954e2feb8179  lib/systemd/system/mcu_sbl_mode.service
+d82626bf581da330a27023ac278e50f9  lib/systemd/system-preset/98-rtd-mcu-bin.preset
+cff6c1d3b914cfb6c05a709c272f5bf4  usr/bin/mcu_reset.sh

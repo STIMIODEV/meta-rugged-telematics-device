@@ -1,0 +1,7 @@
+/.
+/etc
+/etc/ssh
+/etc/ssh/ssh_config
+/usr
+/usr/bin
+/usr/bin/ssh.openssh

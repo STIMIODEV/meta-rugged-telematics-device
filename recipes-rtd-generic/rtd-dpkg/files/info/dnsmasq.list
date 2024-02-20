@@ -1,0 +1,17 @@
+/.
+/etc
+/etc/dnsmasq.conf
+/etc/dnsmasq.d
+/etc/systemd
+/etc/systemd/resolved.conf.d
+/etc/systemd/resolved.conf.d/dnsmasq-resolved.conf
+/lib
+/lib/systemd
+/lib/systemd/system
+/lib/systemd/system/dnsmasq.service
+/lib/systemd/system-preset
+/lib/systemd/system-preset/98-dnsmasq.preset
+/usr
+/usr/bin
+/usr/bin/dhcp_release
+/usr/bin/dnsmasq

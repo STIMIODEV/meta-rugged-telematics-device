@@ -1,0 +1,10 @@
+#!/bin/sh
+[ "$1" != "upgrade" ] || exit 0
+set -e
+if type systemctl >/dev/null 2>/dev/null; then
+	if [ -z "$D" ]; then
+		systemctl stop ble.service restart_ble.service sshd.service watchdog.service wifi_enable.service
+
+		systemctl disable ble.service restart_ble.service sshd.service watchdog.service wifi_enable.service
+	fi
+fi

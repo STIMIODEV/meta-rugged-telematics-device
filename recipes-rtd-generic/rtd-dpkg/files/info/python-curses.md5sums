@@ -1,0 +1,14 @@
+eb33a09d83b5b26cce7e03049c627a1d  usr/lib/python2.7/curses/__init__.py
+c72f3e1833feab3c063894806165c2a9  usr/lib/python2.7/curses/__init__.pyc
+c31ab7e95a36653350d19584a9222833  usr/lib/python2.7/curses/ascii.py
+a7eeb04085a13f296fbfc75c294e34d3  usr/lib/python2.7/curses/ascii.pyc
+77d43464f4d2549d732bfd01a9a24498  usr/lib/python2.7/curses/has_key.py
+ee63d1680c47fc7ed9ba865a4596fdcc  usr/lib/python2.7/curses/has_key.pyc
+f779a6ecfb2d69b6467e01740ebd06a1  usr/lib/python2.7/curses/panel.py
+4888140ae0af3a895c19adfed86e50fc  usr/lib/python2.7/curses/panel.pyc
+bf90e50be92918c93ad3b16f2d902b65  usr/lib/python2.7/curses/textpad.py
+d36cac3421fa8e12bd80a0e822d37304  usr/lib/python2.7/curses/textpad.pyc
+f7a64fdd26fbae4f37fc556241d6da57  usr/lib/python2.7/curses/wrapper.py
+19298e89e7c43430574e90356e48d573  usr/lib/python2.7/curses/wrapper.pyc
+ca344da1ab1af41b2cc9c77f049a9544  usr/lib/python2.7/lib-dynload/_curses.so
+358a34ac9f0de8f4d6a1f3fc25c29bef  usr/lib/python2.7/lib-dynload/_curses_panel.so

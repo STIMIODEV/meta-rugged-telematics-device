@@ -1,0 +1,53 @@
+diff -Naur A/arch/arm/mach-imx/mach-iwg26i.c B/arch/arm/mach-imx/mach-iwg26i.c
+--- A/arch/arm/mach-imx/mach-iwg26i.c	2023-05-20 11:07:40.986128381 +0530
++++ B/arch/arm/mach-imx/mach-iwg26i.c	2023-05-20 11:28:49.462158480 +0530
+@@ -213,7 +213,7 @@
+ 	printk ("\n");
+ 	printk ("Board Info :\n");
+ 	printk ("\tBSP Version : %s\n", BSP_VERSION);
+-	printk ("\tDevice Name and Release : iW-Unified-SC-01-R3.0-REL3.2-Linux5.15\n");
++	printk ("\tDevice Name and Release : iW-Unified-SC-01-R3.0-REL3.3-Linux5.15\n");
+ 	printk ("\tCPU Unique ID\t: 0x%08x%08x \n", unique_id2, unique_id1);
+ 	printk ("\n");
+ 
+diff -Naur A/drivers/net/can/m_can/m_can.c B/drivers/net/can/m_can/m_can.c
+--- A/drivers/net/can/m_can/m_can.c	2023-05-20 11:07:42.690128421 +0530
++++ B/drivers/net/can/m_can/m_can.c	2023-05-20 11:09:38.930131179 +0530
+@@ -1701,7 +1701,7 @@
+ 	close_candev(dev);
+ 	can_led_event(dev, CAN_LED_EVENT_STOP);
+ 
+-	phy_power_off(cdev->transceiver);
++	//phy_power_off(cdev->transceiver);
+ 
+ 	return 0;
+ }
+@@ -1901,13 +1901,13 @@
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+ 	int err;
+ 
+-	err = phy_power_on(cdev->transceiver);
+-	if (err)
+-		return err;
++	//err = phy_power_on(cdev->transceiver);
++	//if (err)
++	//	return err;
+ 
+ 	err = m_can_clk_start(cdev);
+ 	if (err)
+-		goto out_phy_power_off;
++	//	goto out_phy_power_off;
+ 
+ 	/* open the can device */
+ 	err = open_candev(dev);
+@@ -1965,8 +1965,8 @@
+ 	close_candev(dev);
+ exit_disable_clks:
+ 	m_can_clk_stop(cdev);
+-out_phy_power_off:
+-	phy_power_off(cdev->transceiver);
++//out_phy_power_off:
++//	phy_power_off(cdev->transceiver);
+ 	return err;
+ }
+ 

@@ -1,0 +1,48 @@
+diff -Naur B/drivers/iio/industrialio-buffer.c A/drivers/iio/industrialio-buffer.c
+--- B/drivers/iio/industrialio-buffer.c	2023-02-02 16:38:31.264207215 +0530
++++ A/drivers/iio/industrialio-buffer.c	2023-02-03 17:31:34.531625347 +0530
+@@ -1006,20 +1006,19 @@
+ 		if (ret)
+ 			goto err_disable_buffers;
+ 	}
+-
+-	if (indio_dev->currentmode == INDIO_BUFFER_TRIGGERED) {
+-		ret = iio_trigger_attach_poll_func(indio_dev->trig,
+-						   indio_dev->pollfunc);
+-		if (ret)
+-			goto err_disable_buffers;
+-	}
++//        if (indio_dev->currentmode == INDIO_BUFFER_TRIGGERED) {
++//		ret = iio_trigger_attach_poll_func(indio_dev->trig,
++//						   indio_dev->pollfunc);
++//		if (ret)
++//			goto err_disable_buffers;
++//	}
+ 
+ 	if (indio_dev->setup_ops->postenable) {
+ 		ret = indio_dev->setup_ops->postenable(indio_dev);
+ 		if (ret) {
+ 			dev_dbg(&indio_dev->dev,
+ 			       "Buffer not started: postenable failed (%d)\n", ret);
+-			goto err_detach_pollfunc;
++		        goto err_detach_pollfunc;
+ 		}
+ 	}
+ 
+diff -Naur B/drivers/iio/industrialio-trigger.c A/drivers/iio/industrialio-trigger.c
+--- B/drivers/iio/industrialio-trigger.c	2023-02-02 18:55:38.249900105 +0530
++++ A/drivers/iio/industrialio-trigger.c	2023-02-03 17:23:47.480518068 +0530
+@@ -338,11 +336,11 @@
+ 		ret = trig->ops->set_trigger_state(trig, false);
+ 		if (ret)
+ 			return ret;
++		iio_trigger_put_irq(trig, pf->irq);
++		free_irq(pf->irq, pf);
+ 	}
+ 	if (pf->indio_dev->dev.parent == trig->dev.parent)
+ 		trig->attached_own_device = false;
+-	iio_trigger_put_irq(trig, pf->irq);
+-	free_irq(pf->irq, pf);
+ 	module_put(iio_dev_opaque->driver_module);
+ 	return ret;
+ }

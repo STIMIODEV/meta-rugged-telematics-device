@@ -1,0 +1,409 @@
+diff -Naur A/arch/arm/boot/dts/imx6ull-iwg26i.dtsi B/arch/arm/boot/dts/imx6ull-iwg26i.dtsi
+--- A/arch/arm/boot/dts/imx6ull-iwg26i.dtsi	2023-10-23 10:20:17.144076725 +0530
++++ B/arch/arm/boot/dts/imx6ull-iwg26i.dtsi	2023-10-23 10:22:43.412080195 +0530
+@@ -244,8 +244,7 @@
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		spi-max-frequency = <18000000>;
+-	//	bosch,mram-cfg = <0x0 3 2 32 10 1 32 7>;
+-		bosch,mram-cfg = <0x0 3 2 30 10 0 26 12>;
++		bosch,mram-cfg = <0x0 3 2 28 10 0 20 12>;
+ 		clocks = <&hclk>, <&cclk>;
+ 		clock-names = "hclk", "cclk";
+ 		interrupt-parent = <&gpio1>;
+diff -Naur A/drivers/net/can/m_can/m_can.c B/drivers/net/can/m_can/m_can.c
+--- A/drivers/net/can/m_can/m_can.c	2023-10-23 10:20:18.492076757 +0530
++++ B/drivers/net/can/m_can/m_can.c	2023-10-23 10:22:06.932079330 +0530
+@@ -26,6 +26,7 @@
+ bool iw_mcan_prop = false; /* Flag added for Rugged Telematics Device */
+ int iw_ie_reg = 0;
+ bool mode = false;         /* Flag added for determining when tcan has to go to standby mode */
++bool FD_mode = false;
+ #if 0
+ int m_can_rx_clear(struct net_device *dev)
+ {
+@@ -92,7 +93,8 @@
+ 	M_CAN_TXEFS	= 0xf4,
+ 	M_CAN_TXEFA	= 0xf8,
+ };
+-
++/*Transmission delay */
++volatile int Tx_DELAY = 0;
+ /* napi related */
+ #define M_CAN_NAPI_WEIGHT	64
+ 
+@@ -982,17 +984,17 @@
+ 	u32 ir;
+ 	ir = m_can_read(cdev, M_CAN_IR);
+ 	/* ACK all irqs */
+-	if (ir & IR_ALL_INT)
++	if (ir & IR_ALL_INT_CUSTOM_NO_TX)
+ 		m_can_write(cdev, M_CAN_IR, ir);
+ 
+ 	cdev->ops->clear_interrupts(cdev);
+-
++	
+ 	/* schedule NAPI in case of
+ 	 * - rx IRQ
+ 	 * - state change IRQ
+ 	 * - bus error IRQ and bus error reporting
+ 	 */
+-	if(ir == 0x0) /* Watchdog interrupt */
++	if(ir == 0x0 || (ir & IR_RF0N)) /* Watchdog interrupt */
+ 	{
+ 		m_can_disable_all_interrupts(cdev);
+ 		m_can_rx_peripheral_rx(dev);
+@@ -1001,7 +1003,7 @@
+ 	
+ 	if(iw_mcan_prop)
+ 	{
+-		if ((ir & IR_RF0W) || (ir & IR_ERR_ALL_30X)) {
++		if ((ir & IR_RF0W) || (ir & IR_RF0N) || (ir & IR_ERR_ALL_30X)) {
+ 			cdev->irqstatus = ir;
+ 			m_can_disable_all_interrupts(cdev);
+ 			if (!cdev->is_peripheral)
+@@ -1021,20 +1023,6 @@
+ 				m_can_rx_peripheral(dev);
+ 		}
+ 	} /* iw_mcan_prop */
+-	if (cdev->version == 30) {
+-		if (ir & IR_TC) {
+-			/* Transmission Complete Interrupt*/
+-			stats->tx_bytes += can_get_echo_skb(dev, 0, NULL);
+-			stats->tx_packets++;
+-			can_led_event(dev, CAN_LED_EVENT_TX);
+-			netif_wake_queue(dev);
+-		}
+-	} else  {
+-		if (ir & IR_TFE) 
+-		{
+-			netif_wake_queue(dev);
+-		}
+-	}
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -1101,6 +1089,7 @@
+ 	reg_btp = (brp << NBTP_NBRP_SHIFT) | (sjw << NBTP_NSJW_SHIFT) |
+ 		(tseg1 << NBTP_NTSEG1_SHIFT) | (tseg2 << NBTP_NTSEG2_SHIFT);
+ 	m_can_write(cdev, M_CAN_NBTP, reg_btp);
++	Tx_DELAY = 0;
+ 
+ 	if (cdev->can.ctrlmode & CAN_CTRLMODE_FD) {
+ 		reg_btp = 0;
+@@ -1108,12 +1097,13 @@
+ 		sjw = dbt->sjw - 1;
+ 		tseg1 = dbt->prop_seg + dbt->phase_seg1 - 1;
+ 		tseg2 = dbt->phase_seg2 - 1;
++		FD_mode = true;
+ 
+ 		/* TDC is only needed for bitrates beyond 2.5 MBit/s.
+ 		 * This is mentioned in the "Bit Time Requirements for CAN FD"
+ 		 * paper presented at the International CAN Conference 2013
+ 		 */
+-		if (dbt->bitrate >= 2500000) {
++		if (dbt->bitrate > 1000000) {
+ 			u32 tdco, ssp;
+ 
+ 			/* Use the same value of secondary sampling point
+@@ -1145,6 +1135,15 @@
+ 
+ 		m_can_write(cdev, M_CAN_DBTP, reg_btp);
+ 	}
++	else
++	{
++		switch (bt->bitrate)
++		{
++			case 1000000:
++				Tx_DELAY = 0;
++				break;
++		}
++	}
+ 
+ 	return 0;
+ }
+@@ -1202,13 +1201,13 @@
+ 		/* rx fifo configuration, blocking mode, fifo size 1 */
+ 		m_can_write(cdev, M_CAN_RXF0C,
+ 				(cdev->mcfg[MRAM_RXF0].num << RXFC_FS_SHIFT) |
+-				cdev->mcfg[MRAM_RXF0].off | 0x99000000 /*| 0x81200000*/);
++				cdev->mcfg[MRAM_RXF0].off | 0x9A000000 /*| 0x81200000*/);
+ 		//Added by iwave
+ 		k = cdev->mcfg[MRAM_RXF0].num << RXFC_FS_SHIFT | cdev->mcfg[MRAM_RXF0].off ;
+ 
+ 		m_can_write(cdev, M_CAN_RXF1C,
+ 				(cdev->mcfg[MRAM_RXF1].num << RXFC_FS_SHIFT) |
+-				cdev->mcfg[MRAM_RXF1].off | 0x99000000 /*| 0x81200000 */);
++				cdev->mcfg[MRAM_RXF1].off | 0x8C000000 /*| 0x81200000 */);
+ 	}
+ 	else /* iw_mcan_prop */
+ 	{
+@@ -1498,16 +1497,52 @@
+ 	struct canfd_frame *cf = (struct canfd_frame *)cdev->tx_skb->data;
+ 	struct net_device *dev = cdev->net;
+ 	struct sk_buff *skb = cdev->tx_skb;
++	const struct can_bittiming *bt = &cdev->can.bittiming;
++	const struct can_bittiming *dbt = &cdev->can.data_bittiming;
+ 	u32 id, cccr, fdflags;
+ 	int i;
+ 	int putidx;
++	bool FD_29_bit;
++	
+ 	/* Generate ID field for TX buffer Element */
+ 	/* Common to all supported M_CAN versions */
+-	if (cf->can_id & CAN_EFF_FLAG) {
++	if (cf->can_id & CAN_EFF_FLAG) { /* 29 bit identifier */
+ 		id = cf->can_id & CAN_EFF_MASK;
+ 		id |= TX_BUF_XTD;
+-	} else {
++		if(FD_mode == false && bt->bitrate !=1000000)
++		{
++			switch (bt->bitrate)
++			{
++				case 250000:
++					Tx_DELAY = 350;
++					break;
++				case 500000:
++					Tx_DELAY = 80;
++					break;
++			}
++		}
++		else
++		{
++			FD_29_bit = true;
++		}
++	} else { /* 11 bit identifier */
+ 		id = ((cf->can_id & CAN_SFF_MASK) << 18);
++		if(FD_mode == false && bt->bitrate !=1000000)
++		{
++			switch (bt->bitrate)
++			{
++				case 250000:
++					Tx_DELAY = 270;
++					break;
++				case 500000:
++					Tx_DELAY = 40;
++					break;
++			}
++		}
++		else
++		{
++			FD_29_bit = false;
++		}
+ 	}
+ 
+ 	if (cf->can_id & CAN_RTR_FLAG)
+@@ -1576,7 +1611,183 @@
+ 		for (i = 0; i < cf->len; i += 4)
+ 			m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DATA(i / 4),
+ 					*(u32 *)(cf->data + i));
+-
++		if(FD_mode == true && (dbt->bitrate <= 1000000 || bt->bitrate <= 250000))
++		{
++			if(FD_29_bit == true)
++			{
++				if(i==64)
++				{
++					switch(bt->bitrate)
++					{
++						case 250000:
++							switch(dbt->bitrate)
++							{
++								case 250000:
++									Tx_DELAY = 1960;
++									break;
++								case 500000:
++									Tx_DELAY = 840;
++									break;
++								case 1000000:
++									Tx_DELAY = 270;
++									break;
++							}
++							break;
++						case 500000:
++							switch(dbt->bitrate)
++							{
++								case 500000:
++									Tx_DELAY = 740;
++									break;
++								case 1000000:
++									Tx_DELAY = 170;
++									break;
++							}
++							break;
++						case 1000000:
++							switch(dbt->bitrate)
++							{
++								case 1000000:
++									Tx_DELAY = 120;
++									break;
++							}
++							break;
++					}
++				}
++				else
++				{
++					switch(bt->bitrate)
++					{
++						case 250000:
++							switch(dbt->bitrate)
++							{
++								case 250000:
++									Tx_DELAY = 400;
++									break;
++								case 500000:
++									Tx_DELAY = 200;
++									break;
++								case 1000000:
++									Tx_DELAY = 100;
++									break;
++								case 2000000:
++									Tx_DELAY = 60;
++									break;
++								case 4000000:
++									Tx_DELAY = 30;
++									break;
++								case 5000000:
++									Tx_DELAY = 40;
++									break;
++								default:
++									Tx_DELAY = 45;
++									break;
++							}
++							break;
++						case 500000:
++							switch(dbt->bitrate)
++							{
++								case 500000:
++									Tx_DELAY = 110;
++									break;
++								case 1000000:
++									Tx_DELAY = 10;
++									break;
++							}
++							break;
++						case 1000000:
++							switch(dbt->bitrate)
++							{
++								case 1000000:
++									Tx_DELAY = 0;
++									break;
++							}
++							break;
++					}
++				}
++			}
++			else
++			{
++				if(i==64)
++				{
++					switch(bt->bitrate)
++					{
++						case 250000:
++							switch(dbt->bitrate)
++							{
++								case 250000:
++									Tx_DELAY = 1880;
++									break;
++								case 500000:
++									Tx_DELAY = 760;
++									break;
++								case 1000000:
++									Tx_DELAY = 190;
++									break;
++							}
++							break;
++						case 500000:
++							switch(dbt->bitrate)
++							{
++								case 500000:
++									Tx_DELAY = 700;
++									break;
++								case 1000000:
++									Tx_DELAY = 140;
++									break;
++							}
++							break;
++						case 1000000:
++							switch(dbt->bitrate)
++							{
++								case 1000000:
++									Tx_DELAY = 110;
++									break;
++							}
++							break;
++					}
++				}
++				else
++				{
++					switch(bt->bitrate)
++					{
++						case 250000:
++							switch(dbt->bitrate)
++							{
++								case 250000:
++									Tx_DELAY = 330;
++									break;
++								case 500000:
++									Tx_DELAY = 120;
++									break;
++								case 1000000:
++									Tx_DELAY = 25;
++									break;
++							}
++							break;
++						case 500000:
++							switch(dbt->bitrate)
++							{
++								case 500000:
++									Tx_DELAY = 70;
++									break;
++								case 1000000:
++									Tx_DELAY = 0;
++									break;
++							}
++							break;
++						case 1000000:
++							switch(dbt->bitrate)
++							{
++								case 1000000:
++									Tx_DELAY = 0;
++									break;
++							}
++							break;
++					}
++				}
++			}
++		}
+ 		/* Push loopback echo.
+ 		 * Will be looped back on TX interrupt based on message marker
+ 		 */
+@@ -1586,13 +1797,15 @@
+ 		m_can_write(cdev, M_CAN_TXBAR, (1 << putidx));
+ 		if (m_can_tx_fifo_full(cdev) )
+ 		{
++			netif_wake_queue(dev);
+ 			//Don't start the network and enable Transmit FIFO enable interrupt
+ 			m_can_write(cdev, M_CAN_IE, IR_ALL_INT_CUSTOM_NO_TX);
+ 		}
+ 		else
+ 		{
+-			netif_wake_queue(dev);			
++			netif_wake_queue(dev);
+ 		}
++		cdev->tx_skb = NULL;
+ 	}
+ 	
+ 	return NETDEV_TX_OK;
+@@ -1626,9 +1839,10 @@
+ 			 * a queueing mechanism that will queue the skbs and
+ 			 * process them in order.
+ 			 */
++			udelay(Tx_DELAY);
+ 			cdev->tx_skb = skb;
+ 			netif_stop_queue(cdev->net);
+-			queue_work(cdev->tx_wq, &cdev->tx_work);
++			return m_can_tx_handler(cdev);
+ 		}
+ 	} else {
+ 		cdev->tx_skb = skb;

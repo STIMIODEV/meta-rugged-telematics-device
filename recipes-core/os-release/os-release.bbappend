@@ -1,0 +1,1 @@
+PRETTY_NAME = "${DISTRO_NAME} ${VERSION} - iW-Unified-SC-R1.0-REL3.5_UNIFIED_Root_FileSystem"

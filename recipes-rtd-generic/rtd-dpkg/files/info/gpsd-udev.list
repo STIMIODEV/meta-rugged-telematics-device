@@ -1,0 +1,8 @@
+/.
+/etc
+/etc/udev
+/etc/udev/rules.d
+/etc/udev/rules.d/gpsd.rules
+/lib
+/lib/udev
+/lib/udev/gpsd.hotplug

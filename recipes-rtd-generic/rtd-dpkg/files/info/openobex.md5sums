@@ -1,0 +1,3 @@
+98352606b6558b0ce3a6a3e5c9f77ab7  lib/udev/rules.d/60-openobex.rules
+6a9666ab5e223d47b678dccb3433aa2b  usr/lib/libopenobex.so.1.7.2
+4de04d1d789291539764e7c1998a48a8  usr/sbin/obex-check-device

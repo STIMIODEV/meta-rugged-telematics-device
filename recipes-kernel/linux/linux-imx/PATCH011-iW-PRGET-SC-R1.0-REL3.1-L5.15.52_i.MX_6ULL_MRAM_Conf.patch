@@ -1,0 +1,25 @@
+diff -Naur A/arch/arm/boot/dts/imx6ull-iwg26i.dtsi B/arch/arm/boot/dts/imx6ull-iwg26i.dtsi
+--- A/arch/arm/boot/dts/imx6ull-iwg26i.dtsi	2023-04-13 16:48:12.855637222 +0530
++++ B/arch/arm/boot/dts/imx6ull-iwg26i.dtsi	2023-04-13 16:49:22.179637183 +0530
+@@ -244,7 +244,8 @@
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		spi-max-frequency = <18000000>;
+-		bosch,mram-cfg = <0x0 3 2 32 10 1 32 7>;
++	//	bosch,mram-cfg = <0x0 3 2 32 10 1 32 7>;
++		bosch,mram-cfg = <0x0 3 2 30 10 0 26 12>;
+ 		clocks = <&hclk>, <&cclk>;
+ 		clock-names = "hclk", "cclk";
+ 		interrupt-parent = <&gpio1>;
+diff -Naur A/arch/arm/mach-imx/mach-iwg26i.c B/arch/arm/mach-imx/mach-iwg26i.c
+--- A/arch/arm/mach-imx/mach-iwg26i.c	2023-04-13 16:48:12.875637222 +0530
++++ B/arch/arm/mach-imx/mach-iwg26i.c	2023-04-13 16:49:39.995637173 +0530
+@@ -213,7 +213,7 @@
+ 	printk ("\n");
+ 	printk ("Board Info :\n");
+ 	printk ("\tBSP Version : %s\n", BSP_VERSION);
+-	printk ("\tDevice Name and Release : iW-PRGET-SC-01-R3.0-REL3.0-Linux5.15\n");
++	printk ("\tDevice Name and Release : iW-PRGET-SC-01-R3.0-REL3.1-Linux5.15\n");
+ 	printk ("\tCPU Unique ID\t: 0x%08x%08x \n", unique_id2, unique_id1);
+ 	printk ("\n");
+ 
