@@ -10,7 +10,7 @@ IMAGE_INSTALL:append = " \
 	iperf3 tar zip ntp ntpdate curl kernel-modules openobex \
 	openssh unzip gzip dnsmasq libwebsockets \
 	rtd-modem-debug-tools rtd-firmware \
-	rtd-services rtd-general rtd-mcu-bin\
+	rtd-general rtd-mcu-bin rtd-services\
 	rtd-library-source obd-dependency-library obd-xml-files \
 	pulseaudio-server pulseaudio-module-bluetooth-discover \
 	pulseaudio-module-bluez5-device pulseaudio-module-bluez5-discover \
@@ -20,6 +20,7 @@ IMAGE_INSTALL:append = " \
 	cronie bash perl \
 	network-power-management uds-app \
 	libubootenv libubootenv-bin \
+	ntp \
 	geolocator \
     u-boot-scr \
     kernel-devicetree \
