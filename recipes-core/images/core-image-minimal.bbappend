@@ -28,19 +28,23 @@ IMAGE_INSTALL:append = " \
     mqtt-simple-comm \
     reverse-ssh \
     firmware-update\
+	config-update\
     can1 \
+    can0 \
     device-hostname \
 	rauc \
 	datalogger \
-	logmanager \
 	gps \
-	fms \
 	stimio-services \
-	sleepcontrol \
+	fms \
+	ignitionstatus \
 "
 CORE_IMAGE_EXTRA_INSTALL += "openssh"
 PACKAGE_EXCLUDE += " packagegroup-core-ssh-dropbear"
 CORE_IMAGE_EXTRA_INSTALL += "packagegroup-core-ssh-openssh"
+
+IMAGE_FEATURES += " tools-debug "
+
 
 # Here we give sudo access to sudo members
 update_sudoers(){
