@@ -36,7 +36,6 @@ IMAGE_INSTALL:append = " \
 	datalogger \
 	gps \
 	stimio-services \
-	fms \
 	ignitionstatus \
 "
 CORE_IMAGE_EXTRA_INSTALL += "openssh"
